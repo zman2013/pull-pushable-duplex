@@ -4,25 +4,45 @@
 [![Coverage Status](https://coveralls.io/repos/github/jacobbubu/pull-pushable-duplex/badge.svg)](https://coveralls.io/github/jacobbubu/pull-pushable-duplex)
 [![npm](https://img.shields.io/npm/v/@jacobbubu/pull-pushable-duplex.svg)](https://www.npmjs.com/package/@jacobbubu/pull-pushable-duplex/)
 
-> A starter project that makes creating a TypeScript module extremely easy.
+> A helper class for constructing full/half pushable duplex in pull-stream manner.
 
 ## Intro.
 
-This tool was modified from [typescript-library-starter](https://github.com/alexjoverm/typescript-library-starter), but I made the following revisions:
+Constructing a full-duplex, pushable duplex requires complex state management considerations.
 
-  - Use GitHub Actions instead of TravisCI
-  - Used to develop Node.JS Module instead of packaging code for browser
+Especially, you need to make sure that you follow the guidelines of the pull-stream ([pull-stream-protocol-checker](https://github.com/elavoie/pull-stream-protocol-checker)).
 
 ## Usage
 
-```bash
-git clone https://github.com/jacobbubu/typescript-starter.git YOURFOLDERNAME
-cd YOURFOLDERNAME
-npm install
+``` ts
+import * as pull from 'pull-stream'
+import { PushableDuplex } from '@jacobbubu/pull-pushable-duplex'
+
+function valuesToRead<T>(values: T[] = []) {
+  let i = 0
+  return (cb: OnReadCallback<T>) => {
+    i === values.length ? cb(true) : cb(null, values[i])
+    i += 1
+  }
+}
+
+const results: any[] = []
+const d = new PushableDuplex({
+  allowHalfOpen: true,
+  onRead: valuesToRead([1, 2, 3]),
+  onReceived: (data) => {
+    results.push(data)
+  },
+  onFinished: (err) => {
+    console.log("we've" got, results)
+  },
+})
+const peer = {
+  source: pull.values(['a', 'b', 'c']),
+  sink: pull.collect((err, results) => {
+    console.log("peer's got", results)
+  })
+}
+pull(d, peer, d)
 ```
 
-**Start coding!** `package.json` and entry files are already set up for you, so don't worry about linking to your main file, typings, etc. Just keep those files with the same name.
-
-## Before push
-
-Before pushing the code to GitHub, please make sure that `NPM_TOKEN` is configured in `https://github.com/__your_repo__/settings/secrets`, or you can do this through [`semantic-release-cli`](https://github.com/semantic-release/cli).
