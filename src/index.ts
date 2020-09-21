@@ -166,7 +166,7 @@ export class PushableDuplex<In, Out> implements pull.Duplex<In, Out> {
   }
 
   push(data: In, toHead = false) {
-    if (!this.sourceState.normal) return
+    if (!this.sourceState.normal) return false
 
     if (toHead) {
       this.buffer.unshift(data)
@@ -174,6 +174,7 @@ export class PushableDuplex<In, Out> implements pull.Duplex<In, Out> {
       this.buffer.push(data)
     }
     this.sourceDrain()
+    return true
   }
 
   private abortSource(end: pull.EndOrError = true) {
