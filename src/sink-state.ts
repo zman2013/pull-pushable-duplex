@@ -48,6 +48,7 @@ export class SinkState {
       return false
     }
 
+    this._sinkEnding = false
     this._sinkAborting = request
     return true
   }

@@ -48,6 +48,7 @@ export class SourceState {
       return false
     }
 
+    this._sourceEnding = false
     this._sourceAborting = request
     return true
   }
