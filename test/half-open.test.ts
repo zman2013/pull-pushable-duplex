@@ -84,7 +84,7 @@ describe('half-open', () => {
         pull.asyncMap((data, cb) => {
           setTimeout(() => {
             cb(null, data)
-          }, 50)
+          }, 500)
         })
       ),
       sink: pull(

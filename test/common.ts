@@ -13,6 +13,7 @@ export function valuesToRead<T>(values: T[] = [], delay = 0) {
       i += 1
     } else {
       setTimeout(() => {
+        console.log('value', values[i])
         i === values.length ? cb(true) : cb(null, values[i])
         i += 1
       }, delay)

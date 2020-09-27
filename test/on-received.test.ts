@@ -13,7 +13,7 @@ describe('onReceived', () => {
       onRead: valuesToRead(s1Values),
       onReceived: (data, cb) => {
         results.push(data)
-        cb(testError)
+        cb?.(testError)
       },
       onFinished: (err) => {
         expect(err).toBe(testError)

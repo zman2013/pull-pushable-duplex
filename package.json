@@ -109,5 +109,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@jacobbubu/pull-pushable": "file:../pull-pushable/jacobbubu-pull-pushable-0.0.0-development.tgz"
+  }
 }

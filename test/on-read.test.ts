@@ -21,7 +21,7 @@ describe('onRead', () => {
       },
       onReceived: (data, cb) => {
         results.push(data)
-        cb()
+        cb?.()
       },
       onFinished: (err) => {
         expect(err).toBeNull()
